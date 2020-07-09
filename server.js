@@ -9,6 +9,7 @@ server.use(express.json()); // Built in middleware, no need to npm install it
 server.use("/api/posts", postRouter);
 server.use("/api/users", morgan("dev"), userRouter);
 server.use(morgan("dev"));
+server.use(logger);
 
 server.get("/", (req, res) => {
   res.status(200).json({ enviroment: process.env.NODE_ENV });
@@ -17,8 +18,9 @@ server.get("/", (req, res) => {
 //custom middleware
 
 function logger(req, res, next) {
-  const date = new Date().toTimeString();
-  console.log(`\n${req.method} ${req.url} ${res.statusCode} [${date}]\n`);
+  console.log(
+    `${req.method} Request to ${req.url} at ${new Date().toISOString()}`
+  );
   next();
 }
 
